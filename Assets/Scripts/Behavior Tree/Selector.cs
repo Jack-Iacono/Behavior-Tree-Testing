@@ -2,6 +2,10 @@ using System.Collections.Generic;
 
 namespace BehaviorTree
 {
+    /// <summary>
+    /// Will check nodes until one returns either SUCCESS or RUNNING, it will then exit
+    /// Will not evaluate the nodes if the selector node returns FAILURE
+    /// </summary>
     public class Selector : Node
     {
         public Selector() : base() { }

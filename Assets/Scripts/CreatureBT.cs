@@ -11,27 +11,61 @@ public class CreatureBT : BehaviorTree.Tree
 
     public static float speed = 5f;
     public static float fovRange = 5f;
-    public static float attackRange = 1f;
+    public static float fixRange = 1f;
+
+    public float hunger;
+    public Transform food;
 
     protected override Node SetupTree()
     {
         navAgent = GetComponent<NavMeshAgent>();
 
+        // Establises the Behavior Tree and its logic
         Node root = new Selector(new List<Node>()
         {
             new Sequence(new List<Node>
             {
-                new CheckEnemyInAttackRange(transform),
-                new TaskAttack()
+                new CheckHunger(this),
+                new TaskGoToTarget(transform, navAgent),
+                new TaskEat(this)
+            }),
+            new Sequence(new List<Node>
+            {
+                new CheckFixableInFixRange(transform),
+                new TaskFix()
             }),
             new Sequence(new List<Node> 
             {
-                new CheckEnemyInRange(transform),
+                new CheckFixableInRange(transform),
                 new TaskGoToTarget(transform, navAgent)
             }),
             new TaskPatrol(transform, waypoints, navAgent)
-    });
+        });
         return root;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (hunger > 0)
+            hunger -= Time.deltaTime;
+    }
+
+    /// <summary>
+    /// Refills this Creature's hunger
+    /// </summary>
+    public void Eat()
+    {
+        hunger = 20;
+    }
+    /// <summary>
+    /// Get the nearest food source
+    /// </summary>
+    /// <returns>The closest source of food to this agent</returns>
+    public Transform GetClosestFood()
+    {
+        return food;
     }
 
     private void OnDrawGizmos()
@@ -39,6 +73,6 @@ public class CreatureBT : BehaviorTree.Tree
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, fovRange);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.DrawWireSphere(transform.position, fixRange);
     }
 }

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace BehaviorTree
 {
+    /// <summary>
+    /// Will check nodes until one returns either Failure or Running, it will then exit
+    /// </summary>
     public class Sequence : Node
     {
         public Sequence() : base() { }
@@ -9,8 +12,6 @@ namespace BehaviorTree
 
         public override Status Check()
         {
-            bool childRunning = false;
-
             foreach(Node node in children)
             {
                 switch (node.Check())
@@ -21,15 +22,15 @@ namespace BehaviorTree
                     case Status.SUCCESS:
                         continue;
                     case Status.RUNNING:
-                        childRunning = true;
-                        continue;
+                        status = Status.RUNNING;
+                        return status;
                     default:
                         status = Status.SUCCESS;
                         return status;
                 }
             }
 
-            status = childRunning ? Status.RUNNING : Status.SUCCESS;
+            status = Status.SUCCESS;
             return status;
         }
     }

@@ -11,8 +11,9 @@ namespace BehaviorTree
             root = SetupTree();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
+            // Evaluate the nodes
             if(root != null)
             {
                 root.Check();

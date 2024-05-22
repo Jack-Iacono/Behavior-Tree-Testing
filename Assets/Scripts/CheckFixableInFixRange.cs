@@ -1,13 +1,16 @@
-using BehaviorTree;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckEnemyInAttackRange : Node
+using BehaviorTree;
+
+public class CheckFixableInFixRange : Node
 {
-    public static int enemyLayerMask = 1 << 6;
+    public static int fixLayerMask = 1 << 6;
 
     private Transform transform;
 
-    public CheckEnemyInAttackRange(Transform transform) 
+    public CheckFixableInFixRange(Transform transform)
     {
         this.transform = transform;
     }
@@ -24,7 +27,7 @@ public class CheckEnemyInAttackRange : Node
         }
 
         Transform target = (Transform)t;
-        if(Vector3.Distance(transform.position, target.position) < CreatureBT.attackRange)
+        if (Vector3.Distance(transform.position, target.position) < CreatureBT.fixRange)
         {
             status = Status.SUCCESS;
             return status;
