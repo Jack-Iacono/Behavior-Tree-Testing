@@ -26,7 +26,8 @@ public class CreatureBT : BehaviorTree.Tree
             new Sequence(new List<Node>
             {
                 new CheckPlayerInSight(transform, PlayerController.Instance.gameObject.transform),
-                new TaskChasePlayer(transform, navAgent)
+                new TaskChasePlayer(transform, navAgent),
+                new CheckArea(transform, PlayerController.Instance.gameObject.transform)
             }),
             new Sequence(new List<Node>
             {

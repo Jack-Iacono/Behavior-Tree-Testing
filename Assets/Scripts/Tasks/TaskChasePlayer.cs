@@ -28,8 +28,6 @@ public class TaskChasePlayer : Node
             return status;
         }
 
-        ClearData("playerKnownPosition");
-
         status = Status.SUCCESS;
         return status;
     }
