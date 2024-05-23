@@ -10,7 +10,7 @@ public class CreatureBT : BehaviorTree.Tree
     private NavMeshAgent navAgent;
 
     public static float speed = 5f;
-    public static float fovRange = 5f;
+    public static float fovRange = 10f;
     public static float fixRange = 1f;
 
     public float hunger;
@@ -23,6 +23,11 @@ public class CreatureBT : BehaviorTree.Tree
         // Establises the Behavior Tree and its logic
         Node root = new Selector(new List<Node>()
         {
+            new Sequence(new List<Node>
+            {
+                new CheckPlayerInSight(transform, PlayerController.Instance.gameObject.transform),
+                new TaskChasePlayer(transform, navAgent)
+            }),
             new Sequence(new List<Node>
             {
                 new CheckHunger(this),
